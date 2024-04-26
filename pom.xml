@@ -19,6 +19,58 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <hutool.version>5.8.22</hutool.version>
+        <lombok.version>1.18.26</lombok.version>
+        <common.version>1.0-SNAPSHOT</common.version>
+        <consumer.version>1.0-SNAPSHOT</consumer.version>
+        <provider.version>1.0-SNAPSHOT</provider.version>
+        <rpc-s-framework.version>1.0-SNAPSHOT</rpc-s-framework.version>
+        <vertx.version>4.5.1</vertx.version>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>${hutool.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.whedc</groupId>
+                <artifactId>common</artifactId>
+                <version>${common.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.whedc</groupId>
+                <artifactId>provider</artifactId>
+                <version>${provider.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.whedc</groupId>
+                <artifactId>consumer</artifactId>
+                <version>${consumer.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.whedc</groupId>
+                <artifactId>rpc-s-framework</artifactId>
+                <version>${rpc-s-framework.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.vertx</groupId>
+                <artifactId>vertx-core</artifactId>
+                <version>${vertx.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>
