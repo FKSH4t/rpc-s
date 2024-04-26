@@ -20,7 +20,7 @@
     <dependencies>
         <dependency>
             <groupId>com.whedc</groupId>
-            <artifactId>rpc-s-framework</artifactId>
+            <artifactId>rpc-s-core</artifactId>
         </dependency>
         <dependency>
             <groupId>com.whedc</groupId>
