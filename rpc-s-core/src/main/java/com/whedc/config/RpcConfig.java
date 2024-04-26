@@ -8,6 +8,10 @@ import lombok.Data;
 @Data
 public class RpcConfig {
     /**
+     * 是否开启模拟调用，默认不开启
+     */
+    private boolean mock = false;
+    /**
      * 名称
      */
     private String name = "rpc-s";
