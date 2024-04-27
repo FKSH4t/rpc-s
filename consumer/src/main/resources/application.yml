@@ -1,5 +1,5 @@
 name: rpc-s
 version: 3.0
-serverPort: 8003
 mock: false
+serverPort: 8003
 serializer: hessian

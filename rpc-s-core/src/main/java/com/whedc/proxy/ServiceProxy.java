@@ -2,10 +2,13 @@ package com.whedc.proxy;
 
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
+import com.whedc.RpcApplication;
+import com.whedc.config.RpcConfig;
 import com.whedc.model.RpcRequest;
 import com.whedc.model.RpcResponse;
 import com.whedc.serial.JdkSerializer;
 import com.whedc.serial.Serializer;
+import com.whedc.serial.SerializerFactory;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
@@ -36,7 +39,7 @@ public class ServiceProxy implements InvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         // 指定序列化器
-        Serializer serializer = new JdkSerializer();
+        Serializer serializer = SerializerFactory.getInstance(RpcApplication.getRpcConfig().getSerializer());
 
         // 构造rpc请求
         RpcRequest rpcRequest = RpcRequest.builder()
@@ -47,7 +50,10 @@ public class ServiceProxy implements InvocationHandler {
                 .build();
         try {
             byte[] serialized = serializer.serialize(rpcRequest);
-            try (HttpResponse httpResponse = HttpRequest.post("http://localhost:8080")
+            try (HttpResponse httpResponse = HttpRequest.post(
+                    RpcApplication.getRpcConfig().getServerHost()
+                            + ":"
+                            + RpcApplication.getRpcConfig().getServerPort())
                          .body(serialized)
                          .execute()) {
 

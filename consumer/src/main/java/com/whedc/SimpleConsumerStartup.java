@@ -17,5 +17,6 @@ public class SimpleConsumerStartup {
         } else {
             System.out.println("user == null");
         }
+//        System.out.println("userService.getMockShort() = " + userService.getMockShort());
     }
 }

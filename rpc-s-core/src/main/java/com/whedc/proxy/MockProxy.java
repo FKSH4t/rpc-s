@@ -24,13 +24,13 @@ public class MockProxy implements InvocationHandler {
             } else if (returnType == boolean.class) {
                 return faker.random().nextBoolean();
             } else if (returnType == short.class) {
-                return (short) 0;
+                return (short) 1;
             } else if (returnType == long.class) {
                 return faker.random().nextLong();
             }
         }
 
         // 若方法返回对象
-        return "mock result object";
+        return null;
     }
 }

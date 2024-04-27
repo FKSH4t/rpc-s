@@ -1,10 +1,12 @@
 package com.whedc.server;
 
+import com.whedc.RpcApplication;
 import com.whedc.model.RpcRequest;
 import com.whedc.model.RpcResponse;
 import com.whedc.registry.LocalRegistry;
 import com.whedc.serial.JdkSerializer;
 import com.whedc.serial.Serializer;
+import com.whedc.serial.SerializerFactory;
 import io.vertx.core.Handler;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpServerRequest;
@@ -25,7 +27,7 @@ import java.lang.reflect.Method;
  */
 public class HttpRequetHandler implements Handler<HttpServerRequest> {
     // 指定序列化器
-    private final Serializer serializer = new JdkSerializer();
+    private final Serializer serializer = SerializerFactory.getInstance(RpcApplication.getRpcConfig().getSerializer());
 
     @Override
     public void handle(HttpServerRequest httpServerRequest) {

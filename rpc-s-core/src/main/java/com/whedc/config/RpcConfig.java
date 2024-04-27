@@ -1,5 +1,6 @@
 package com.whedc.config;
 
+import com.whedc.serial.SerializerKeys;
 import lombok.Data;
 
 /**
@@ -27,4 +28,8 @@ public class RpcConfig {
      * 服务端口号
      */
     private Integer serverPort = 8080;
+    /**
+     * 序列化器
+     */
+    private String serializer = SerializerKeys.JDK;
 }

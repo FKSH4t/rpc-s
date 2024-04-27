@@ -8,11 +8,12 @@ import com.whedc.serviceImpl.UserServiceImpl;
 
 public class SimpleProviderStartup {
     public static void main(String[] args) {
+        RpcApplication.init();
         // 服务者启动时先注册服务
         LocalRegistry.register(UserService.class.getName(), UserServiceImpl.class);
 
         // 启动web服务器
         HttpServer httpServer = new VertxHttpServer();
-        httpServer.startHttpServer(8080);
+        httpServer.startHttpServer(RpcApplication.getRpcConfig().getServerPort());
     }
 }

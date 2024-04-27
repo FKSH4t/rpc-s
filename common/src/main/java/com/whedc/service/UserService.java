@@ -10,4 +10,8 @@ public interface UserService {
      * @return
      */
     User getUser(User user);
+
+    default short getMockShort() {
+        return 0;
+    }
 }

@@ -1,0 +1,2 @@
+jdk=com.whedc.serial.JdkSerializer
+hessian=com.whedc.serial.HessianSerializer
