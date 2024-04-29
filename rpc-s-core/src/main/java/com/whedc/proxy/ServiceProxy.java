@@ -1,11 +1,16 @@
 package com.whedc.proxy;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import com.whedc.RpcApplication;
 import com.whedc.config.RpcConfig;
+import com.whedc.constant.RpcConstant;
 import com.whedc.model.RpcRequest;
 import com.whedc.model.RpcResponse;
+import com.whedc.model.ServiceMeteInfo;
+import com.whedc.registry.Registry;
+import com.whedc.registry.RegistryFactory;
 import com.whedc.serial.JdkSerializer;
 import com.whedc.serial.Serializer;
 import com.whedc.serial.SerializerFactory;
@@ -13,6 +18,7 @@ import com.whedc.serial.SerializerFactory;
 import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.util.List;
 
 /**
  * Jdk动态服务代理
@@ -41,6 +47,7 @@ public class ServiceProxy implements InvocationHandler {
         // 指定序列化器
         Serializer serializer = SerializerFactory.getInstance(RpcApplication.getRpcConfig().getSerializer());
 
+        String serviceName = method.getDeclaringClass().getName();
         // 构造rpc请求
         RpcRequest rpcRequest = RpcRequest.builder()
                 .serviceName(method.getDeclaringClass().getName())
@@ -50,10 +57,22 @@ public class ServiceProxy implements InvocationHandler {
                 .build();
         try {
             byte[] serialized = serializer.serialize(rpcRequest);
+
+            // 从注册中心获取服务提供者主机地址
+            RpcConfig rpcConfig = RpcApplication.getRpcConfig();
+            Registry registry = RegistryFactory.getInstance(rpcConfig.getRegistryConfig().getRegistry());
+            ServiceMeteInfo serviceMeteInfo = new ServiceMeteInfo();
+            serviceMeteInfo.setServiceName(serviceName);
+            serviceMeteInfo.setServiceVersion(RpcConstant.DEFAULT_SERVICE_VERSION);
+            List<ServiceMeteInfo> serviceList = registry.serviceDiscovery(serviceMeteInfo.getServiceKey());
+            if (CollUtil.isEmpty(serviceList)) {
+                throw new RuntimeException("No service address");
+            }
+            // 默认获取列表第一个服务地址
+            ServiceMeteInfo meteInfo = serviceList.get(0);
+
             try (HttpResponse httpResponse = HttpRequest.post(
-                    RpcApplication.getRpcConfig().getServerHost()
-                            + ":"
-                            + RpcApplication.getRpcConfig().getServerPort())
+                         meteInfo.getServiceAddress())
                          .body(serialized)
                          .execute()) {
 

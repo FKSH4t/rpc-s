@@ -1,7 +1,10 @@
 package com.whedc;
 
+import com.whedc.config.RegistryConfig;
 import com.whedc.config.RpcConfig;
 import com.whedc.constant.RpcConstant;
+import com.whedc.registry.Registry;
+import com.whedc.registry.RegistryFactory;
 import com.whedc.utils.ConfigUtil;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,6 +27,12 @@ public class RpcApplication {
     {
         rpcConfig = newRpcConfig;
         log.info("rpc init, config = {}", newRpcConfig.toString());
+
+        // 注册中心初始化
+        RegistryConfig registryConfig = rpcConfig.getRegistryConfig();
+        Registry registry = RegistryFactory.getInstance(registryConfig.getRegistry());
+        registry.init(registryConfig);
+        log.info("registry init, config = {}", registryConfig);
     }
 
     /**
