@@ -40,4 +40,15 @@ public interface Registry {
      * 服务销毁
      */
     void destroy();
+
+    /**
+     * 心跳检测（服务端）
+     */
+    void heartBeat();
+
+    /**
+     * 监听，当消费者监听的某个key发生修改时
+     * etcd会主动通知消费者
+     */
+    void watch(String serviceNodeKey);
 }

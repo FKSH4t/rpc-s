@@ -1,0 +1,5 @@
+name: rpc-s
+version: 3.0
+serverPort: 8004
+mock: false
+serializer: hessian

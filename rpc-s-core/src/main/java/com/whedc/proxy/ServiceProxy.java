@@ -70,6 +70,7 @@ public class ServiceProxy implements InvocationHandler {
             }
             // 默认获取列表第一个服务地址
             ServiceMeteInfo meteInfo = serviceList.get(0);
+            System.out.println(method + ":" +meteInfo.getServiceAddress());
 
             try (HttpResponse httpResponse = HttpRequest.post(
                          meteInfo.getServiceAddress())
