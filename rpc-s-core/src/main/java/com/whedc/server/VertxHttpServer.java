@@ -2,9 +2,10 @@ package com.whedc.server;
 
 import io.vertx.core.Vertx;
 
-public class VertxHttpServer implements HttpServer{
+public class VertxHttpServer implements HttpServer {
     /**
      * 启动vertx服务器
+     *
      * @param port 监听端口号
      */
     @Override

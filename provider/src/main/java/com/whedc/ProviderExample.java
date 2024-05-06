@@ -8,6 +8,7 @@ import com.whedc.registry.Registry;
 import com.whedc.registry.RegistryFactory;
 import com.whedc.server.HttpServer;
 import com.whedc.server.VertxHttpServer;
+import com.whedc.server.tcp.VertxTcpServer;
 import com.whedc.service.UserService;
 import com.whedc.serviceImpl.UserServiceImpl;
 
@@ -33,7 +34,8 @@ public class ProviderExample {
             throw new RuntimeException(e);
         }
         // 启动web服务器
-        HttpServer httpServer = new VertxHttpServer();
-        httpServer.startHttpServer(RpcApplication.getRpcConfig().getServerPort());
+//        HttpServer httpServer = new VertxHttpServer();
+        VertxTcpServer server = new VertxTcpServer();
+        server.startHttpServer(RpcApplication.getRpcConfig().getServerPort());
     }
 }

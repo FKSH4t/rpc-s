@@ -1,6 +1,7 @@
 package com.whedc.proxy;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import com.whedc.RpcApplication;
@@ -9,16 +10,23 @@ import com.whedc.constant.RpcConstant;
 import com.whedc.model.RpcRequest;
 import com.whedc.model.RpcResponse;
 import com.whedc.model.ServiceMeteInfo;
+import com.whedc.protocol.*;
 import com.whedc.registry.Registry;
 import com.whedc.registry.RegistryFactory;
 import com.whedc.serial.JdkSerializer;
 import com.whedc.serial.Serializer;
 import com.whedc.serial.SerializerFactory;
+import com.whedc.server.tcp.VertxTcpClient;
+import io.vertx.core.Vertx;
+import io.vertx.core.buffer.Buffer;
+import io.vertx.core.net.NetClient;
+import io.vertx.core.net.NetSocket;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Jdk动态服务代理
@@ -70,16 +78,21 @@ public class ServiceProxy implements InvocationHandler {
             }
             // 默认获取列表第一个服务地址
             ServiceMeteInfo meteInfo = serviceList.get(0);
-            System.out.println(method + ":" +meteInfo.getServiceAddress());
+            // 发送tcp请求
+            RpcResponse rpcResponse = VertxTcpClient.doRequest(rpcRequest, meteInfo);
+            return rpcResponse.getResult();
 
-            try (HttpResponse httpResponse = HttpRequest.post(
-                         meteInfo.getServiceAddress())
-                         .body(serialized)
-                         .execute()) {
 
-                RpcResponse rpcResponse = serializer.deserialize(httpResponse.bodyBytes(), RpcResponse.class);
-                return rpcResponse.getResult();
-            }
+//            System.out.println(method + ":" +meteInfo.getServiceAddress());
+//
+//            try (HttpResponse httpResponse = HttpRequest.post(
+//                         meteInfo.getServiceAddress())
+//                         .body(serialized)
+//                         .execute()) {
+//
+//                RpcResponse rpcResponse = serializer.deserialize(httpResponse.bodyBytes(), RpcResponse.class);
+//                return rpcResponse.getResult();
+//            }
 
         } catch (IOException e) {
             e.printStackTrace();

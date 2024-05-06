@@ -15,7 +15,7 @@ public class SimpleConsumerStartup {
         user.setName("UserServiceName");
         User getUserFromRemote = userService.getUser(user);
         userService.getUser(user);
-        itemService.testService();
+//        itemService.testService();
         userService.getUser(user);
         if (getUserFromRemote != null) {
             System.out.println(getUserFromRemote.getName());
