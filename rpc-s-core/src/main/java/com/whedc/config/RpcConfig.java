@@ -1,5 +1,6 @@
 package com.whedc.config;
 
+import com.whedc.loadBalancer.LoadBalancerKeys;
 import com.whedc.serial.SerializerKeys;
 import lombok.Data;
 
@@ -36,4 +37,8 @@ public class RpcConfig {
      * 默认注册中心配置
      */
     private RegistryConfig registryConfig = new RegistryConfig();
+    /**
+     * 负载均衡器
+     */
+    private String loadBalancer = LoadBalancerKeys.ROUND_ROBIN;
 }

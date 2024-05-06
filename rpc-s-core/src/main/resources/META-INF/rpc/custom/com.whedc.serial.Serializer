@@ -1,2 +1,0 @@
-json=com.whedc.serial.JsonSerializer
-kryo=com.whedc.serial.KryoSerializer

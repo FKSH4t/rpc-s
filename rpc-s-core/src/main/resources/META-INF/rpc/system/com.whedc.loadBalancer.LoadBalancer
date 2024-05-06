@@ -1,0 +1,3 @@
+roundRobin=com.whedc.loadBalancer.RoundRobinLoadBalancer
+random=com.whedc.loadBalancer.RandomLoadBalancer
+consistentHash=com.whedc.loadBalancer.ConsistentHashLoadBalancer

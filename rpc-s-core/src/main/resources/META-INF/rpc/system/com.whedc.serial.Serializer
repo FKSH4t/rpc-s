@@ -1,2 +1,4 @@
 jdk=com.whedc.serial.JdkSerializer
 hessian=com.whedc.serial.HessianSerializer
+json=com.whedc.serial.JsonSerializer
+kryo=com.whedc.serial.KryoSerializer

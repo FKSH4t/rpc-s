@@ -7,6 +7,8 @@ import cn.hutool.http.HttpResponse;
 import com.whedc.RpcApplication;
 import com.whedc.config.RpcConfig;
 import com.whedc.constant.RpcConstant;
+import com.whedc.loadBalancer.LoadBalancer;
+import com.whedc.loadBalancer.LoadBalancerFactory;
 import com.whedc.model.RpcRequest;
 import com.whedc.model.RpcResponse;
 import com.whedc.model.ServiceMeteInfo;
@@ -25,7 +27,9 @@ import io.vertx.core.net.NetSocket;
 import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -77,7 +81,15 @@ public class ServiceProxy implements InvocationHandler {
                 throw new RuntimeException("No service address");
             }
             // 默认获取列表第一个服务地址
-            ServiceMeteInfo meteInfo = serviceList.get(0);
+//            ServiceMeteInfo meteInfo = serviceList.get(0);
+            // 使用负载均衡
+            LoadBalancer loadBalancer = LoadBalancerFactory.getInstance(rpcConfig.getLoadBalancer());
+            Map<String, Object> requestParams = new HashMap<>() {
+                {
+                    put("methodName", rpcRequest.getMethodName());
+                }
+            };
+            ServiceMeteInfo meteInfo = loadBalancer.select(requestParams, serviceList);
             // 发送tcp请求
             RpcResponse rpcResponse = VertxTcpClient.doRequest(rpcRequest, meteInfo);
             return rpcResponse.getResult();
