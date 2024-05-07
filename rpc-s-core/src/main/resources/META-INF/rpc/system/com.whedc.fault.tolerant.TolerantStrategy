@@ -1,0 +1,4 @@
+failFast=com.whedc.fault.tolerant.FailFastTolerantStrategy
+failBack=com.whedc.fault.tolerant.FailbackTolerantStrategy
+failOver=com.whedc.fault.tolerant.FailOverTolerantStrategy
+failSafe=com.whedc.fault.tolerant.FailSafeTolerantStrategy

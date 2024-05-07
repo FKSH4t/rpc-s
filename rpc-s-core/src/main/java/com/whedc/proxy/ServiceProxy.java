@@ -9,6 +9,8 @@ import com.whedc.config.RpcConfig;
 import com.whedc.constant.RpcConstant;
 import com.whedc.fault.retry.RetryStrategy;
 import com.whedc.fault.retry.RetryStrategyFactory;
+import com.whedc.fault.tolerant.TolerantStrategy;
+import com.whedc.fault.tolerant.TolerantStrategyFactory;
 import com.whedc.loadBalancer.LoadBalancer;
 import com.whedc.loadBalancer.LoadBalancerFactory;
 import com.whedc.model.RpcRequest;
@@ -93,10 +95,25 @@ public class ServiceProxy implements InvocationHandler {
             };
             ServiceMeteInfo meteInfo = loadBalancer.select(requestParams, serviceList);
             // 发送tcp请求，并启用重试机制
-            RetryStrategy retryStrategy = RetryStrategyFactory.getInstance(rpcConfig.getRetryStrategy());
-            RpcResponse rpcResponse = retryStrategy.doRetry(() ->
-                VertxTcpClient.doRequest(rpcRequest, meteInfo)
-            );
+            RpcResponse rpcResponse;
+            try {
+                RetryStrategy retryStrategy = RetryStrategyFactory.getInstance(rpcConfig.getRetryStrategy());
+                rpcResponse = retryStrategy.doRetry(() ->
+                        VertxTcpClient.doRequest(rpcRequest, meteInfo)
+                );
+            } catch (Exception e) {
+                TolerantStrategy tolerantStrategy = TolerantStrategyFactory.getInstance(rpcConfig.getTolerantStrategy());
+                Map<String, Object> context = new HashMap<>(){
+                    {
+                        put("serviceList", serviceList);
+                        put("currentNode", meteInfo);
+                        put("loadBalancer", loadBalancer);
+                        put("rpcRequest", rpcRequest);
+                    }
+                };
+                rpcResponse = tolerantStrategy.doTolerant(context, e);
+            }
+
             return rpcResponse.getResult();
 
 

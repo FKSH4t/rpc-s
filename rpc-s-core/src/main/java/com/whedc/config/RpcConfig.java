@@ -1,6 +1,7 @@
 package com.whedc.config;
 
 import com.whedc.fault.retry.RetryStrategyKeys;
+import com.whedc.fault.tolerant.TolerantStrategyKeys;
 import com.whedc.loadBalancer.LoadBalancerKeys;
 import com.whedc.serial.SerializerKeys;
 import lombok.Data;
@@ -46,4 +47,8 @@ public class RpcConfig {
      * 重试策略
      */
     private String retryStrategy = RetryStrategyKeys.NO;
+    /**
+     * 容错策略
+     */
+    private String tolerantStrategy = TolerantStrategyKeys.FAIL_FAST;
 }
