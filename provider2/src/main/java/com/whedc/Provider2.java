@@ -8,14 +8,18 @@ import com.whedc.registry.Registry;
 import com.whedc.registry.RegistryFactory;
 import com.whedc.server.HttpServer;
 import com.whedc.server.VertxHttpServer;
+import com.whedc.server.tcp.VertxTcpClient;
+import com.whedc.server.tcp.VertxTcpServer;
 import com.whedc.service.ItemService;
+import com.whedc.service.UserService;
 import com.whedc.serviceImpl.ItemServiceImpl;
+import com.whedc.serviceImpl.UserServiceImpl;
 
 public class Provider2 {
     public static void main(String[] args) {
         RpcApplication.init();
-        String serviceName = ItemService.class.getName();
-        LocalRegistry.register(serviceName, ItemServiceImpl.class);
+        String serviceName = UserService.class.getName();
+        LocalRegistry.register(serviceName, UserServiceImpl.class);
 
         RpcConfig rpcConfig = RpcApplication.getRpcConfig();
         RegistryConfig registryConfig = rpcConfig.getRegistryConfig();
@@ -30,7 +34,8 @@ public class Provider2 {
             throw new RuntimeException(e);
         }
         // 启动web服务器
-        HttpServer httpServer = new VertxHttpServer();
+//        HttpServer httpServer = new VertxHttpServer();
+        VertxTcpServer httpServer = new VertxTcpServer();
         httpServer.startHttpServer(RpcApplication.getRpcConfig().getServerPort());
     }
 }

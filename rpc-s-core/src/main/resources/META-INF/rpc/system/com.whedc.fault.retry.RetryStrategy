@@ -1,0 +1,2 @@
+no=com.whedc.fault.retry.NoRetryingStrategy
+fixedInterval=com.whedc.fault.retry.FixedIntervalRetryStrategy

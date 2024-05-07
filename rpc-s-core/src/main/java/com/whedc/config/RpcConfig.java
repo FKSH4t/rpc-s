@@ -1,5 +1,6 @@
 package com.whedc.config;
 
+import com.whedc.fault.retry.RetryStrategyKeys;
 import com.whedc.loadBalancer.LoadBalancerKeys;
 import com.whedc.serial.SerializerKeys;
 import lombok.Data;
@@ -41,4 +42,8 @@ public class RpcConfig {
      * 负载均衡器
      */
     private String loadBalancer = LoadBalancerKeys.ROUND_ROBIN;
+    /**
+     * 重试策略
+     */
+    private String retryStrategy = RetryStrategyKeys.NO;
 }

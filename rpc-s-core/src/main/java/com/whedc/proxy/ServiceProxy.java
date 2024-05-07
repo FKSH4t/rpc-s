@@ -7,6 +7,8 @@ import cn.hutool.http.HttpResponse;
 import com.whedc.RpcApplication;
 import com.whedc.config.RpcConfig;
 import com.whedc.constant.RpcConstant;
+import com.whedc.fault.retry.RetryStrategy;
+import com.whedc.fault.retry.RetryStrategyFactory;
 import com.whedc.loadBalancer.LoadBalancer;
 import com.whedc.loadBalancer.LoadBalancerFactory;
 import com.whedc.model.RpcRequest;
@@ -90,8 +92,11 @@ public class ServiceProxy implements InvocationHandler {
                 }
             };
             ServiceMeteInfo meteInfo = loadBalancer.select(requestParams, serviceList);
-            // 发送tcp请求
-            RpcResponse rpcResponse = VertxTcpClient.doRequest(rpcRequest, meteInfo);
+            // 发送tcp请求，并启用重试机制
+            RetryStrategy retryStrategy = RetryStrategyFactory.getInstance(rpcConfig.getRetryStrategy());
+            RpcResponse rpcResponse = retryStrategy.doRetry(() ->
+                VertxTcpClient.doRequest(rpcRequest, meteInfo)
+            );
             return rpcResponse.getResult();
 
 
