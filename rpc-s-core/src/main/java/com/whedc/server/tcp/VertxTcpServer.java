@@ -1,12 +1,11 @@
 package com.whedc.server.tcp;
 
 
-import com.whedc.server.HttpServer;
+import com.whedc.server.WebServer;
 import io.vertx.core.Vertx;
-import io.vertx.core.buffer.Buffer;
 import io.vertx.core.net.NetServer;
 
-public class VertxTcpServer implements HttpServer {
+public class VertxTcpServer implements WebServer {
 
     private byte[] handleRequest(byte[] requestData) {
         System.out.println(new String(requestData));
@@ -14,7 +13,7 @@ public class VertxTcpServer implements HttpServer {
         return "Hello, tcp".getBytes();
     }
     @Override
-    public void startHttpServer(int port) {
+    public void doStart(int port) {
         // 创建vertx实例
         Vertx vertx = Vertx.vertx();
 

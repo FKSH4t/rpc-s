@@ -1,0 +1,11 @@
+rpc:
+  server:
+    name: rpc-s
+    version: 3.0
+    mock: false
+    serverPort: 8003
+    serializer: hessian
+  registry:
+    address: http://localhost:2379
+    registry: etcd
+    timeout: 2000

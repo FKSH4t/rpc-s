@@ -6,13 +6,8 @@ import com.whedc.model.ServiceMeteInfo;
 import com.whedc.registry.LocalRegistry;
 import com.whedc.registry.Registry;
 import com.whedc.registry.RegistryFactory;
-import com.whedc.server.HttpServer;
-import com.whedc.server.VertxHttpServer;
-import com.whedc.server.tcp.VertxTcpClient;
 import com.whedc.server.tcp.VertxTcpServer;
-import com.whedc.service.ItemService;
 import com.whedc.service.UserService;
-import com.whedc.serviceImpl.ItemServiceImpl;
 import com.whedc.serviceImpl.UserServiceImpl;
 
 public class Provider2 {
@@ -34,8 +29,8 @@ public class Provider2 {
             throw new RuntimeException(e);
         }
         // 启动web服务器
-//        HttpServer httpServer = new VertxHttpServer();
+//        WebServer httpServer = new VertxHttpServer();
         VertxTcpServer httpServer = new VertxTcpServer();
-        httpServer.startHttpServer(RpcApplication.getRpcConfig().getServerPort());
+        httpServer.doStart(RpcApplication.getRpcConfig().getServerPort());
     }
 }

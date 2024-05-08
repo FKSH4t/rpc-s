@@ -4,6 +4,12 @@ import cn.hutool.core.io.resource.NoResourceException;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.setting.dialect.Props;
 import cn.hutool.setting.yaml.YamlUtil;
+import org.yaml.snakeyaml.Yaml;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.Map;
+import java.util.Properties;
 
 public class ConfigUtil {
     /**
@@ -27,6 +33,23 @@ public class ConfigUtil {
         // 前面都是拼接.properties配置文件的文件名，拼接好后直接从classpath下读取
 
         Props props = null;
+        Properties properties = new Properties();
+        try {
+            // 读取YAML文件
+            Yaml yaml = new Yaml();
+            FileInputStream fis = new FileInputStream(yamlFileName.toString());
+            Map<String, Object> yamlMap = yaml.load(fis);
+
+            // 将YAML映射转换为Properties对象
+
+            yamlMap.forEach((key, value) -> properties.setProperty(key, value.toString()));
+            // 输出Properties对象
+            properties.forEach((key, value) -> System.out.println(key + "=" + value));
+            props = new Props(properties);
+            return props.toBean(tClass, prefix);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         try {
             return YamlUtil.loadByPath(ymlFileName.toString(), tClass);
         } catch (NoResourceException yamlEx) {

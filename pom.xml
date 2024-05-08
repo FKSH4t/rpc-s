@@ -15,6 +15,8 @@
         <module>rpc-s-framework</module>
         <module>rpc-s-core</module>
         <module>provider2</module>
+        <module>rpc-s-spring-boot-starter</module>
+        <module>example-springboot-provider</module>
     </modules>
 
     <properties>
