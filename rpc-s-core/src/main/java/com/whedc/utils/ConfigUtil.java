@@ -8,6 +8,8 @@ import org.yaml.snakeyaml.Yaml;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -34,32 +36,34 @@ public class ConfigUtil {
 
         Props props = null;
         Properties properties = new Properties();
-        try {
-            // 读取YAML文件
-            Yaml yaml = new Yaml();
-            FileInputStream fis = new FileInputStream(yamlFileName.toString());
-            Map<String, Object> yamlMap = yaml.load(fis);
-
-            // 将YAML映射转换为Properties对象
-
-            yamlMap.forEach((key, value) -> properties.setProperty(key, value.toString()));
-            // 输出Properties对象
-            properties.forEach((key, value) -> System.out.println(key + "=" + value));
-            props = new Props(properties);
-            return props.toBean(tClass, prefix);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        try {
-            return YamlUtil.loadByPath(ymlFileName.toString(), tClass);
-        } catch (NoResourceException yamlEx) {
-            try {
-                return YamlUtil.loadByPath(yamlFileName.toString(), tClass);
-            } catch (NoResourceException ymlEx) {
-                props = new Props(propsFileName.toString());
+        String[] configFileNames = new String[] {ymlFileName.toString(), yamlFileName.toString(), propsFileName.toString()};
+        for (int i = 0; i < configFileNames.length; i++) {
+            String configFileName = configFileNames[i];
+            if (StrUtil.endWith(configFileName, ".properties")) {
+                props = new Props(configFileName);
                 return props.toBean(tClass, prefix);
             }
+            try {
+                // 读取YAML文件
+                Yaml yaml = new Yaml();
+                FileInputStream fis = new FileInputStream(yamlFileName.toString());
+                Map<String, Object> yamlMap = yaml.load(fis);
+
+                // 将YAML映射转换为Properties对象
+
+                yamlMap.forEach((key, value) -> properties.setProperty(key, value.toString()));
+                // 输出Properties对象
+                properties.forEach((key, value) -> System.out.println(key + "=" + value));
+                props = new Props(properties);
+                return props.toBean(tClass, prefix);
+            } catch (FileNotFoundException e) {
+                if (i == configFileNames.length - 1) {
+                    e.printStackTrace();
+                }
+            }
         }
+
+        return null;
     }
 
     public static <T> T loadConfig(Class<T> tClass, String prefix) {

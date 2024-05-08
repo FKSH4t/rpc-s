@@ -43,8 +43,11 @@ public class RpcApplication {
      */
     public static void init() {
         RpcConfig newRpcConfig;
+        RegistryConfig registryConfig;
         try {
             newRpcConfig = ConfigUtil.loadConfig(RpcConfig.class, RpcConstant.DEFAULT_CONFIG_PREFIX);
+            registryConfig = ConfigUtil.loadConfig(RegistryConfig.class, RpcConstant.DEFAULT_REGISTRY_PREFIX);
+            newRpcConfig.setRegistryConfig(registryConfig);
         } catch (Exception e) {
             // 自定义配置加载失败，使用默认配置
             log.info("Custom config load failed, using default config");

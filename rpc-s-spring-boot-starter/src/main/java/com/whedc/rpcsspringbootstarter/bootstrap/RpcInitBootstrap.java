@@ -20,11 +20,6 @@ import javax.annotation.Resource;
 @Slf4j
 @Component
 public class RpcInitBootstrap implements ImportBeanDefinitionRegistrar {
-
-    // 获取全局配置
-    @Resource
-    private RpcConfig rpcConfig;
-
     /**
      * Spring容器初始化时执行，初始化Rpc框架
      * @param importingClassMetadata
@@ -38,10 +33,10 @@ public class RpcInitBootstrap implements ImportBeanDefinitionRegistrar {
                 .getAnnotationAttributes(EnableRpc.class.getName())
                 .get("needServer");
 
-        log.info("rpcConfig is: {}", rpcConfig);
-
         // Rpc通用框架初始化
-        RpcApplication.init(rpcConfig);
+        RpcApplication.init();
+
+        RpcConfig rpcConfig = RpcApplication.getRpcConfig();
 
         if (needServer) {
             WebServer server = new VertxTcpServer();
